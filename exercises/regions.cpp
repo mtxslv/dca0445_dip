@@ -1,6 +1,6 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
-#include <algorithm>    // std::min
+#include <algorithm>    // std::min and std::max
 
 using namespace cv;
 using namespace std;
@@ -14,7 +14,7 @@ int main(int argc, char** argv){
   // checking image reading
   image= imread(argv[1],CV_LOAD_IMAGE_GRAYSCALE);
   if(!image.data)
-    cout << "nao abriu bolhas.png" << endl;
+    cout << "image could not be opened" << endl;
 
   //inputing  vertices and checking if they don't match image size
   do{
