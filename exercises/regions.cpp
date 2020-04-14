@@ -45,6 +45,7 @@ int main(int argc, char** argv){
   }
   
   imshow("Processed Image", image); 
+  imwrite("processed_image.jpg", image);
 
   waitKey();
 
