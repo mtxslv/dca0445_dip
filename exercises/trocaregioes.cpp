@@ -46,7 +46,7 @@ int main(int argc, char** argv){
   namedWindow("Processed Image",WINDOW_AUTOSIZE);
   imshow("Processed Image", processed_image);
 
-  waitKey();  
+  waitKey();
 
 
   return 0;
