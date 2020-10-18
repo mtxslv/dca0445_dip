@@ -36,6 +36,12 @@ int main(int argc, char** argv){
     cv::imshow("equalized greyscale image",equalized_greyscale_image);
     key = cv::waitKey(30);
     if(key == 27) break;
+    if(key == 32){
+      //salvar imagens
+      cv::imwrite("./exercises_images/greyscale_image.png",greyscale_image);
+      cv::imwrite("./exercises_images/equalized_greyscale_image.png",equalized_greyscale_image);
+      std::cout<<"imagens salvas!"<<std::endl;
+    }
   }
   return 0;
 }
