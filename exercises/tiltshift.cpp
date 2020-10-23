@@ -2,7 +2,7 @@
 #include <opencv2/opencv.hpp>
 #include<cmath>
 
-cv::Mat image1, image2, img_ponder;
+cv::Mat image1, img_ponder, img_ponder_negativo, imagem_renderizada;
 
 double x0 = 0; // center of the weighted filter image
 int x0_slider;
@@ -16,9 +16,6 @@ double coef = 0;
 int coef_slider;
 const int coef_slider_max = 100;
 
-//int l1=-20,l2=30;
-//float d=6;
-//int altura=0;
 
 float alpha(float domain_point,float x0, float b,float d){
   float l1 = x0 - b;
@@ -36,55 +33,40 @@ void gerar_imagem_ponderacao(cv::Mat &imagem_ponder){
       imagem_ponder.at<float>(i,j) = alpha(i,x0*rows/2, band*rows/2,coef*50+1);
     }
   }
- //std::cout<<"\n passei por aki \n";
+  img_ponder_negativo = cv::Mat::ones(rows,cols,CV_32F)- imagem_ponder;
 }
 
 
 void on_x0_trackbar(int, void *){
   x0 = (double) x0_slider/x0_slider_max;
   gerar_imagem_ponderacao(img_ponder);
-  imshow("Tela Teste", img_ponder);
+  imshow("Tela Teste", img_ponder_negativo);
 }
 
 void on_band_trackbar(int, void *){
   band = (double) band_slider/band_slider_max;
   gerar_imagem_ponderacao(img_ponder);
-  imshow("Tela Teste", img_ponder);
+  imshow("Tela Teste", img_ponder_negativo);
 }
 
 void on_coef_trackbar(int, void *){
   coef = (double) coef_slider/coef_slider_max;
   gerar_imagem_ponderacao(img_ponder);
-  imshow("Tela Teste", img_ponder);
+  imshow("Tela Teste", img_ponder_negativo);
 }
 
 int main(){
-  image1 = cv::imread("example_images/blend1.jpg");
-  image2 = cv::imread("example_images/blend2.jpg");
+  image1 = cv::imread("exercises_images/brazilian_beach_with_mountains.jpg");
 
-  int width1, height1, width2, height2;  
+  int width1, height1;  
 
   //show dimensions
   width1=image1.cols;
   height1=image1.rows;
   std::cout <<"\t width1 = "<< width1 << "\n\t height1 = " << height1 << std::endl;
 
-  width2=image2.cols;
-  height2=image2.rows;
-  std::cout <<"\t width2 = "<< width2 << "\n\t height2 = " << height2 << std::endl;
+  img_ponder = cv::Mat(height1,width1,CV_32F);
 
-  float alphinha = alpha(5.5,-20,30,6);
-
-  std::cout<<"valor de alpha = "<<alphinha<<std::endl;
-
-  img_ponder = cv::Mat(width1,height1,CV_32F);
-
-  /*
-  gerar_imagem_ponderacao(img_ponder);
-  cv::imshow("Imagem ponderacao",img_ponder);
-  */
-  x0 = 0;
-  
   // a partir daqui cria-se a janela
   cv::namedWindow("Tela Teste");
 
