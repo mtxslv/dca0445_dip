@@ -36,19 +36,33 @@ void montar_imagem(){
   cv::split(image1_borrada.clone(),canais_imagem_blur);
 
   cv::Mat canais_produto_original[3];
-  cv::Mat canal_convertido;
+  cv::Mat canais_produto_blur[3];
+
+  cv::Mat canal_convertido_original, produto_nao_convertido_original;
+  cv::Mat canal_convertido_blur, produto_nao_convertido_blur;
 
   for(int iterador=0;iterador<3;iterador++){
-    canais_imagem_original[iterador].convertTo(canal_convertido,CV_32F);
-    cv::multiply(canal_convertido,img_ponder,canais_produto_original[iterador]);
+    canais_imagem_original[iterador].convertTo(canal_convertido_original,CV_32F);
+    cv::multiply(canal_convertido_original,img_ponder,produto_nao_convertido_original);
+    produto_nao_convertido_original.convertTo(canais_produto_original[iterador],CV_8UC3);
+
+    canais_imagem_blur[iterador].convertTo(canal_convertido_blur,CV_32F);
+    cv::multiply(canal_convertido_blur,img_ponder_negativo,produto_nao_convertido_blur);
+    produto_nao_convertido_blur.convertTo(canais_produto_blur[iterador],CV_8UC3);
+    /*
     std::cout<<"\n tipo do canal original = "<<canais_imagem_original->type();
     std::cout<<"\n tipo do img_ponder = "<<img_ponder.type();
+    std::cout<<"\n tipo do canal produto = "<<canais_produto_original->type()<<std::endl; 
+    */   
   }
 
-  cv::Mat poha_da_imagem_processada;
+  cv::Mat a_imagem_processada;
+  cv::Mat a_imagem_blur;
   
-  cv::merge(canais_produto_original,3,poha_da_imagem_processada);
-  imshow("KARALHA",poha_da_imagem_processada);
+  cv::merge(canais_produto_original,3,a_imagem_processada);
+  cv::merge(canais_produto_blur,3,a_imagem_blur);
+  imagem_renderizada = a_imagem_blur + a_imagem_processada;
+  //imshow("KARALHA",poha_da_imagem_processada+poha_imagem_blur);
 
 }
 
@@ -68,25 +82,26 @@ void gerar_imagem_ponderacao(cv::Mat &imagem_ponder){
 void on_x0_trackbar(int, void *){
   x0 = (double) x0_slider/x0_slider_max;
   gerar_imagem_ponderacao(img_ponder);
-  imshow("Tela Teste", img_ponder_negativo);
+  imshow("Tela Teste", imagem_renderizada);
 }
 
 void on_band_trackbar(int, void *){
   band = (double) band_slider/band_slider_max;
   gerar_imagem_ponderacao(img_ponder);
-  imshow("Tela Teste", img_ponder_negativo);
+  imshow("Tela Teste", imagem_renderizada);
 }
 
 void on_coef_trackbar(int, void *){
   coef = (double) coef_slider/coef_slider_max;
   gerar_imagem_ponderacao(img_ponder);
-  imshow("Tela Teste", img_ponder_negativo);
+  imshow("Tela Teste", imagem_renderizada);
 }
 
 int main(){
-  image1 = cv::imread("exercises_images/brazilian_beach_with_mountains.jpg");
+  image1 = cv::imread("exercises_images/rio_de_janeiro_by_alobos_life.jpg");
 
   int width1, height1;  
+  char key;
 
   //show dimensions
   width1=image1.cols;
@@ -119,7 +134,12 @@ int main(){
   cv::createTrackbar(TrackbarName,"Tela Teste", &coef_slider, coef_slider_max, on_coef_trackbar);
   on_coef_trackbar(coef_slider,0); 
 
-  cv::waitKey(0);
+  key = (char)  cv::waitKey(0);
+  if(key == 32){
+    //salvar imagens
+    cv::imwrite("./exercises_images/result_tiltshift.png",imagem_renderizada);
+    std::cout<<"imagens salvas!"<<std::endl;
+  }  
 
   return 0;
 }
