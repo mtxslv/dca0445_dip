@@ -12,7 +12,7 @@ double band = 0; // band size
 int band_slider;
 const int band_slider_max = 100;
 
-double coef = 0;
+double coef = 0; // d parameter
 int coef_slider;
 const int coef_slider_max = 100;
 
@@ -27,11 +27,7 @@ float alpha(float domain_point,float x0, float b,float d){
 void montar_imagem(){
   cv::Mat canais_imagem_original[3];
   cv::split(image1.clone(),canais_imagem_original);
-  /*
-  imshow("1",canais_imagem_original[0]);
-  imshow("2",canais_imagem_original[1]);
-  imshow("3",canais_imagem_original[2]);
-  */
+
   cv::Mat canais_imagem_blur[3];
   cv::split(image1_borrada.clone(),canais_imagem_blur);
 
@@ -49,11 +45,6 @@ void montar_imagem(){
     canais_imagem_blur[iterador].convertTo(canal_convertido_blur,CV_32F);
     cv::multiply(canal_convertido_blur,img_ponder_negativo,produto_nao_convertido_blur);
     produto_nao_convertido_blur.convertTo(canais_produto_blur[iterador],CV_8UC3);
-    /*
-    std::cout<<"\n tipo do canal original = "<<canais_imagem_original->type();
-    std::cout<<"\n tipo do img_ponder = "<<img_ponder.type();
-    std::cout<<"\n tipo do canal produto = "<<canais_produto_original->type()<<std::endl; 
-    */   
   }
 
   cv::Mat a_imagem_processada;
@@ -62,8 +53,7 @@ void montar_imagem(){
   cv::merge(canais_produto_original,3,a_imagem_processada);
   cv::merge(canais_produto_blur,3,a_imagem_blur);
   imagem_renderizada = a_imagem_blur + a_imagem_processada;
-  //imshow("KARALHA",poha_da_imagem_processada+poha_imagem_blur);
-
+  
 }
 
 void gerar_imagem_ponderacao(cv::Mat &imagem_ponder){
@@ -121,10 +111,6 @@ int main(int argc, char** argv){
 
   // vamos borrar a imagem
   cv::GaussianBlur(image1,image1_borrada,cv::Size(101,101),1.0,0.0);
-
-  //display images
-  // imshow("imagem borrada", image1_borrada);
-  // imshow("imagem original", image1);
 
   // a partir daqui cria-se a janela
   cv::namedWindow("Tiltshift Screen");
