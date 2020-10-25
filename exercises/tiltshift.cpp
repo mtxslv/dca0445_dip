@@ -76,25 +76,29 @@ void gerar_imagem_ponderacao(cv::Mat &imagem_ponder){
     }
   }
   img_ponder_negativo = cv::Mat::ones(rows,cols,CV_32F)- imagem_ponder;
+
+  imshow("Weight Matrix",imagem_ponder);
+  imshow("Negative Weight Matrix", img_ponder_negativo);
+
   montar_imagem();
 }
 
 void on_x0_trackbar(int, void *){
   x0 = (double) x0_slider/x0_slider_max;
   gerar_imagem_ponderacao(img_ponder);
-  imshow("Tela Teste", imagem_renderizada);
+  imshow("Tiltshift Screen", imagem_renderizada);
 }
 
 void on_band_trackbar(int, void *){
   band = (double) band_slider/band_slider_max;
   gerar_imagem_ponderacao(img_ponder);
-  imshow("Tela Teste", imagem_renderizada);
+  imshow("Tiltshift Screen", imagem_renderizada);
 }
 
 void on_coef_trackbar(int, void *){
   coef = (double) coef_slider/coef_slider_max;
   gerar_imagem_ponderacao(img_ponder);
-  imshow("Tela Teste", imagem_renderizada);
+  imshow("Tiltshift Screen", imagem_renderizada);
 }
 
 int main(int argc, char** argv){
@@ -116,33 +120,35 @@ int main(int argc, char** argv){
   img_ponder = cv::Mat(height1,width1,CV_32F);
 
   // vamos borrar a imagem
-  cv::GaussianBlur(image1,image1_borrada,cv::Size(21,21),1.0,0.0);
+  cv::GaussianBlur(image1,image1_borrada,cv::Size(101,101),1.0,0.0);
 
   //display images
-  imshow("imagem borrada", image1_borrada);
-  imshow("imagem original", image1);
+  // imshow("imagem borrada", image1_borrada);
+  // imshow("imagem original", image1);
 
   // a partir daqui cria-se a janela
-  cv::namedWindow("Tela Teste");
+  cv::namedWindow("Tiltshift Screen");
 
   char TrackbarName[50];
   
-  std::sprintf(TrackbarName, "x0 x %d :", x0_slider_max);
-  cv::createTrackbar(TrackbarName,"Tela Teste", &x0_slider, x0_slider_max, on_x0_trackbar);
+  std::sprintf(TrackbarName, "center x %d :", x0_slider_max);
+  cv::createTrackbar(TrackbarName,"Tiltshift Screen", &x0_slider, x0_slider_max, on_x0_trackbar);
   on_x0_trackbar(x0_slider,0);
 
   std::sprintf(TrackbarName, "band x %d :", band_slider_max);
-  cv::createTrackbar(TrackbarName,"Tela Teste", &band_slider, band_slider_max, on_band_trackbar);
+  cv::createTrackbar(TrackbarName,"Tiltshift Screen", &band_slider, band_slider_max, on_band_trackbar);
   on_band_trackbar(band_slider,0);  
 
   std::sprintf(TrackbarName, "coef x %d :", coef_slider_max);
-  cv::createTrackbar(TrackbarName,"Tela Teste", &coef_slider, coef_slider_max, on_coef_trackbar);
+  cv::createTrackbar(TrackbarName,"Tiltshift Screen", &coef_slider, coef_slider_max, on_coef_trackbar);
   on_coef_trackbar(coef_slider,0); 
 
   key = (char)  cv::waitKey(0);
   if(key == 32){
     //salvar imagens
     cv::imwrite("./exercises_images/result_tiltshift.png",imagem_renderizada);
+    cv::imwrite("./exercises_images/negative_ponder.png",255*img_ponder_negativo);
+    cv::imwrite("./exercises_images/ponder_matrix.png",255*img_ponder);
     std::cout<<"imagens salvas!"<<std::endl;
   }  
 
