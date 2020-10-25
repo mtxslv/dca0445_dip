@@ -24,20 +24,33 @@ float alpha(float domain_point,float x0, float b,float d){
   return y;
 }
 
-/*
 void montar_imagem(){
+  cv::Mat canais_imagem_original[3];
+  cv::split(image1.clone(),canais_imagem_original);
+  /*
+  imshow("1",canais_imagem_original[0]);
+  imshow("2",canais_imagem_original[1]);
+  imshow("3",canais_imagem_original[2]);
+  */
+  cv::Mat canais_imagem_blur[3];
+  cv::split(image1_borrada.clone(),canais_imagem_blur);
 
-  cv::Mat img_ponder_tri;
-  cv::merge(img_ponder,img_ponder,img_ponder,3,img_ponder_tri);
+  cv::Mat canais_produto_original[3];
+  cv::Mat canal_convertido;
 
-  cv::Mat img_ponder_tri_negativo;
-  cv::merge(img_ponder_negativo,img_ponder_negativo,img_ponder_negativo,3,img_ponder_tri_negativo);
+  for(int iterador=0;iterador<3;iterador++){
+    canais_imagem_original[iterador].convertTo(canal_convertido,CV_32F);
+    cv::multiply(canal_convertido,img_ponder,canais_produto_original[iterador]);
+    std::cout<<"\n tipo do canal original = "<<canais_imagem_original->type();
+    std::cout<<"\n tipo do img_ponder = "<<img_ponder.type();
+  }
 
-  cv::Mat image_auxiliar = image1.mul(img_ponder_tri);
-  cv::Mat outra_imagem_auxiliar = image1_borrada.mul(img_ponder_tri_negativo);
-  imagem_renderizada = outra_imagem_auxiliar + image_auxiliar;
+  cv::Mat poha_da_imagem_processada;
+  
+  cv::merge(canais_produto_original,3,poha_da_imagem_processada);
+  imshow("KARALHA",poha_da_imagem_processada);
+
 }
-*/
 
 void gerar_imagem_ponderacao(cv::Mat &imagem_ponder){
   int rows, cols;
@@ -49,7 +62,7 @@ void gerar_imagem_ponderacao(cv::Mat &imagem_ponder){
     }
   }
   img_ponder_negativo = cv::Mat::ones(rows,cols,CV_32F)- imagem_ponder;
-  //montar_imagem();
+  montar_imagem();
 }
 
 void on_x0_trackbar(int, void *){
