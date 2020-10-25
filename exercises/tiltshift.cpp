@@ -111,7 +111,7 @@ int main(){
   img_ponder = cv::Mat(height1,width1,CV_32F);
 
   // vamos borrar a imagem
-  cv::GaussianBlur(image1,image1_borrada,cv::Size(5,5),1.0,0.0);
+  cv::GaussianBlur(image1,image1_borrada,cv::Size(21,21),1.0,0.0);
 
   //display images
   imshow("imagem borrada", image1_borrada);
