@@ -97,8 +97,13 @@ void on_coef_trackbar(int, void *){
   imshow("Tela Teste", imagem_renderizada);
 }
 
-int main(){
-  image1 = cv::imread("exercises_images/rio_de_janeiro_by_alobos_life.jpg");
+int main(int argc, char** argv){
+  image1 = cv::imread(argv[1]);
+
+  if(!image1.data){
+    std::cout << "imagem nao carregou corretamente\n";
+    return(-1);
+  }  
 
   int width1, height1;  
   char key;
