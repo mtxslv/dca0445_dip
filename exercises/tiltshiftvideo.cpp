@@ -31,25 +31,28 @@ void on_trackbar_line(int, void*){
 }
 */
 int main(int argvc, char** argv){
-
-  cv::VideoCapture cap("exercises_images/Ocean - 7518.mp4");
-  std::cout<<"\n existem "<<cap.get(cv::CAP_PROP_FRAME_COUNT)<<" frames no video \n";
-  if (!cap.isOpened()){
-    std::cout<<"Error opening video stream \n";
-    return -1;
-  }
-  while(1){
-    cv::Mat frame;
-    cap >> frame;
-    if(frame.empty())
-        break;
-    cv::imshow("Frame",frame);
-    char c = (char)cv::waitKey(25);
-    if(c==27)
-        break;    
-  }
-  cap.release();
-  cv::destroyAllWindows();
+    int frame_counter = 0;
+    cv::VideoCapture cap("exercises_images/Ocean - 7518.mp4");
+    std::cout<<"\n existem "<<cap.get(cv::CAP_PROP_FRAME_COUNT)<<" frames no video \n";
+    if (!cap.isOpened()){
+        std::cout<<"Error opening video stream \n";
+        return -1;
+    }
+    while(1){
+        frame_counter = frame_counter + 1;
+        
+        cv::Mat frame;
+        cap >> frame;
+        if(frame.empty())
+            break;
+        if (frame_counter%5==0)
+            cv::imshow("Frame",frame);
+        char c = (char)cv::waitKey(25);
+        if(c==27)
+            break;    
+    }
+    cap.release();
+    cv::destroyAllWindows();
   
   /*  
   image1 = cv::imread("example_images/blend1.jpg");
