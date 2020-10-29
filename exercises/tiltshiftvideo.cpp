@@ -51,5 +51,6 @@ int main(int argvc, char** argv){
   on_trackbar_line(top_slider, 0 );
 
   cv::waitKey(0);
+  std::cout<<std::endl;
   return 0;
 }
