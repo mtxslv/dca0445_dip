@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <opencv2/opencv.hpp>
-
+/*
 double alfa;
 int alfa_slider = 0;
 int alfa_slider_max = 100;
@@ -29,8 +29,29 @@ void on_trackbar_line(int, void*){
   }
   on_trackbar_blend(alfa_slider,0);
 }
-
+*/
 int main(int argvc, char** argv){
+
+  cv::VideoCapture cap("exercises_images/Ocean - 7518.mp4");
+  std::cout<<"\n existem "<<cap.get(cv::CAP_PROP_FRAME_COUNT)<<" frames no video \n";
+  if (!cap.isOpened()){
+    std::cout<<"Error opening video stream \n";
+    return -1;
+  }
+  while(1){
+    cv::Mat frame;
+    cap >> frame;
+    if(frame.empty())
+        break;
+    cv::imshow("Frame",frame);
+    char c = (char)cv::waitKey(25);
+    if(c==27)
+        break;    
+  }
+  cap.release();
+  cv::destroyAllWindows();
+  
+  /*  
   image1 = cv::imread("example_images/blend1.jpg");
   image2 = cv::imread("example_images/blend2.jpg");
   image2.copyTo(imageTop);
@@ -52,5 +73,6 @@ int main(int argvc, char** argv){
 
   cv::waitKey(0);
   std::cout<<std::endl;
+  */
   return 0;
 }
