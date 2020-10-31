@@ -117,7 +117,7 @@ int main(int argvc, char** argv){
     img_ponder = cv::Mat(height1,width1,CV_32F);
 
     // vamos borrar a imagem
-    cv::GaussianBlur(image1,image1_borrada,cv::Size(101,101),1.0,0.0);
+    cv::GaussianBlur(image1,image1_borrada,cv::Size(5,5),10.0,10.0);
 
     // a partir daqui cria-se a janela
     cv::namedWindow("Tiltshift Screen");
@@ -158,7 +158,7 @@ int main(int argvc, char** argv){
             break;
         }    
         
-        cv::GaussianBlur(image1,image1_borrada,cv::Size(101,101),1.0,0.0);
+        cv::GaussianBlur(image1,image1_borrada,cv::Size(5,5),10.0,10.0);
         gerar_imagem_ponderacao(img_ponder);
 
 
@@ -166,7 +166,7 @@ int main(int argvc, char** argv){
             cv::imshow("Frame",imagem_renderizada);
 
             // Write the frame into the file 'outcpp.avi'
-            video.write(frame);
+            video.write(imagem_renderizada);
         }    
         char c = (char)cv::waitKey(25);
         if(c==27)
