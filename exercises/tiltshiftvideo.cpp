@@ -98,12 +98,15 @@ int main(int argvc, char** argv){
     cv::Mat frame;
     int frame_counter = 0;
 
-    cv::VideoCapture cap("exercises_images/Ocean - 7518.mp4");
-    std::cout<<"\n existem "<<cap.get(cv::CAP_PROP_FRAME_COUNT)<<" frames no video \n";
+    std::cout<<argv[1];
+    cv::VideoCapture cap(argv[1]);
+    
     if (!cap.isOpened()){
         std::cout<<"Error opening video stream \n";
         return -1;
     }
+
+    std::cout<<"\n existem "<<cap.get(cv::CAP_PROP_FRAME_COUNT)<<" frames no video \n";
 
     cap >> image1;
 
@@ -142,7 +145,7 @@ int main(int argvc, char** argv){
     cv::destroyAllWindows();
 
     // Define the codec and create VideoWriter object.The output is stored in 'outcpp.avi' file. 
-	  cv::VideoWriter video("./exercises_images/outcpp.avi",CV_FOURCC('M','J','P','G'),10, cv::Size(cap.get(CV_CAP_PROP_FRAME_WIDTH),cap.get(CV_CAP_PROP_FRAME_HEIGHT))); 
+	  cv::VideoWriter video("./exercises_images/stopmotion.avi",CV_FOURCC('M','J','P','G'),10, cv::Size(cap.get(CV_CAP_PROP_FRAME_WIDTH),cap.get(CV_CAP_PROP_FRAME_HEIGHT))); 
 	
 
     while(1){
