@@ -123,7 +123,11 @@ int main(int argvc, char** argv){
     cv::namedWindow("Tiltshift Screen");
 
     char TrackbarName[50];
-    
+
+    std::sprintf(TrackbarName, "center x %d :", x0_slider_max);
+    cv::createTrackbar(TrackbarName,"Tiltshift Screen", &x0_slider, x0_slider_max, on_x0_trackbar);
+    on_x0_trackbar(x0_slider,0);
+
     std::sprintf(TrackbarName, "band x %d :", band_slider_max);
     cv::createTrackbar(TrackbarName,"Tiltshift Screen", &band_slider, band_slider_max, on_band_trackbar);
     on_band_trackbar(band_slider,0);  
@@ -132,26 +136,44 @@ int main(int argvc, char** argv){
     cv::createTrackbar(TrackbarName,"Tiltshift Screen", &coef_slider, coef_slider_max, on_coef_trackbar);
     on_coef_trackbar(coef_slider,0);    
 
-    std::sprintf(TrackbarName, "center x %d :", x0_slider_max);
-    cv::createTrackbar(TrackbarName,"Tiltshift Screen", &x0_slider, x0_slider_max, on_x0_trackbar);
-    on_x0_trackbar(x0_slider,0);
 
     char key; 
     key = (char)cv::waitKey(0); 
+    cv::destroyAllWindows();
 
-    while(1){
+    // Define the codec and create VideoWriter object.The output is stored in 'outcpp.avi' file. 
+	  cv::VideoWriter video("./exercises_images/outcpp.avi",CV_FOURCC('M','J','P','G'),10, cv::Size(cap.get(CV_CAP_PROP_FRAME_WIDTH),cap.get(CV_CAP_PROP_FRAME_HEIGHT))); 
+	
+
+    while(frame_counter<187){
         frame_counter = frame_counter + 1;
 
+        std::cout<<"frame_counter = "<<frame_counter<<std::endl;
+
         cap >> frame;
-        if(frame.empty())
+        cap >> image1;
+
+        cv::GaussianBlur(image1,image1_borrada,cv::Size(101,101),1.0,0.0);
+        gerar_imagem_ponderacao(img_ponder);
+
+        if(frame.empty()){
+            std::cout<<"frame empty";
             break;
-        if (frame_counter%5==0)
-            cv::imshow("Frame",frame);
+        }    
+        if (frame_counter%4==0){
+            cv::imshow("Frame",imagem_renderizada);
+
+            // Write the frame into the file 'outcpp.avi'
+            video.write(frame);
+        }    
         char c = (char)cv::waitKey(25);
         if(c==27)
             break;    
     }
+    std::cout<<"I am here"<<std::endl;
     cap.release();
+    video.release();
+
     cv::destroyAllWindows();
   
   return 0;

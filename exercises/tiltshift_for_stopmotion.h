@@ -1,0 +1,1 @@
+int tela_tiltshift();
