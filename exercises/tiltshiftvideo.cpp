@@ -145,7 +145,7 @@ int main(int argvc, char** argv){
 	  cv::VideoWriter video("./exercises_images/outcpp.avi",CV_FOURCC('M','J','P','G'),10, cv::Size(cap.get(CV_CAP_PROP_FRAME_WIDTH),cap.get(CV_CAP_PROP_FRAME_HEIGHT))); 
 	
 
-    while(frame_counter<187){
+    while(1){
         frame_counter = frame_counter + 1;
 
         std::cout<<"frame_counter = "<<frame_counter<<std::endl;
@@ -153,13 +153,15 @@ int main(int argvc, char** argv){
         cap >> frame;
         cap >> image1;
 
+        if(frame.empty()){
+            std::cout<<"frame empty"<<std::endl;
+            break;
+        }    
+        
         cv::GaussianBlur(image1,image1_borrada,cv::Size(101,101),1.0,0.0);
         gerar_imagem_ponderacao(img_ponder);
 
-        if(frame.empty()){
-            std::cout<<"frame empty";
-            break;
-        }    
+
         if (frame_counter%4==0){
             cv::imshow("Frame",imagem_renderizada);
 
@@ -170,7 +172,8 @@ int main(int argvc, char** argv){
         if(c==27)
             break;    
     }
-    std::cout<<"I am here"<<std::endl;
+    std::cout<<"Video Processing Finished!"<<std::endl;
+
     cap.release();
     video.release();
 
