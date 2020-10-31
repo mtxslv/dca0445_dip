@@ -110,7 +110,7 @@ int main(int argc, char** argv){
   img_ponder = cv::Mat(height1,width1,CV_32F);
 
   // vamos borrar a imagem
-  cv::GaussianBlur(image1,image1_borrada,cv::Size(101,101),1.0,0.0);
+  cv::GaussianBlur(image1,image1_borrada,cv::Size(5,5),5.0,5.0);
 
   // a partir daqui cria-se a janela
   cv::namedWindow("Tiltshift Screen");
