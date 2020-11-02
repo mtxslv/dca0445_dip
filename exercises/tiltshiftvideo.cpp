@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <opencv2/opencv.hpp>
-#include<cmath>
+#include <cmath>
 
 cv::Mat image1, image1_borrada, img_ponder, img_ponder_negativo, imagem_renderizada;
 
@@ -145,7 +145,7 @@ int main(int argvc, char** argv){
     cv::destroyAllWindows();
 
     // Define the codec and create VideoWriter object.The output is stored in 'outcpp.avi' file. 
-	  cv::VideoWriter video("./exercises_images/stopmotion.avi",CV_FOURCC('M','J','P','G'),10, cv::Size(cap.get(CV_CAP_PROP_FRAME_WIDTH),cap.get(CV_CAP_PROP_FRAME_HEIGHT))); 
+	  cv::VideoWriter video("./exercises_images/stopmotion.mp4",CV_FOURCC('M','J','P','G'),10, cv::Size(cap.get(CV_CAP_PROP_FRAME_WIDTH),cap.get(CV_CAP_PROP_FRAME_HEIGHT))); 
 	
 
     while(1){
