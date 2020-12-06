@@ -172,7 +172,8 @@ int main(int, char**) {
     }
 
     if (subtract) {
-      imagegray = cv::max(imagegray - backgroundImage, cv::Scalar(0));
+      //imagegray = cv::max(imagegray - backgroundImage, cv::Scalar(0));
+      // depois de resolver, descomentar
     }
 
     if (negative) {
