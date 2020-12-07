@@ -33,10 +33,10 @@ void deslocaDFT(cv::Mat& image) {
 
 int main(int argc, char** argv){
   cv::Mat original_image, log_original_image, padded_image, complexImage, filter, tmp, H_pra_visualizacao;
-  cv::Mat_<float> float_padded_image, zeros, realInput, H,tmp_exp ;
+  cv::Mat_<float> float_padded_image, zeros, realInput, H,tmp_exp , g;
   std::vector<cv::Mat> planos;
   int dft_M, dft_N;
-  float D0=10.0, C=0.05, gamma_h = 10.0, gamma_l=1.0;
+  float D0=10.0, C=50, gamma_h = 100.0, gamma_l=1.0;
 
   original_image = cv::imread(argv[1],cv::IMREAD_GRAYSCALE); 
   if(original_image.empty())
@@ -132,9 +132,14 @@ int main(int argc, char** argv){
   // imagem filtrada
   cv::split(complexImage, planos);
 
+  std::cout<<planos[0].type()<<std::endl;
+  cv::exp(planos[0],g);
+  std::cout<<g.type()<<std::endl;
   // normaliza a parte real para exibicao
+  cv::normalize(g, g, 0, 1, cv::NORM_MINMAX);
   cv::normalize(planos[0], planos[0], 0, 1, cv::NORM_MINMAX);
-  cv::imshow("filtrada", planos[0]);  
+  cv::imshow("g",g);
+  cv::imshow("filtrada",planos[0]);  
   cv::waitKey();
   
   return 0; 
