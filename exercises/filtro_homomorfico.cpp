@@ -33,15 +33,16 @@ void deslocaDFT(cv::Mat& image) {
 
 int main(int argc, char** argv){
   cv::Mat original_image, log_original_image, padded_image, complexImage, filter, tmp, H_pra_visualizacao;
-  cv::Mat_<float> float_padded_image, zeros, realInput, H,tmp_exp , g;
+  cv::Mat_<float> float_padded_image, zeros, realInput, H,tmp_exp , g, log_visualiza;
   std::vector<cv::Mat> planos;
   int dft_M, dft_N;
-  float D0=10.0, C=50, gamma_h = 100.0, gamma_l=1.0;
+  float D0=80.0, C=1.0, gamma_h = 2.0, gamma_l=0.250;
 
   original_image = cv::imread(argv[1],cv::IMREAD_GRAYSCALE); 
-  if(original_image.empty())
+  if(original_image.empty()){
+    std::cout<<"no valid image found"<<std::endl;
     return -1;
-
+  }
   cv::imshow("original_image", original_image);
   cv::waitKey();
 
@@ -63,6 +64,10 @@ int main(int argc, char** argv){
   padded_image.convertTo(float_padded_image,CV_32F); // se não converter, o log não funciona
   log_original_image = cv::Mat(padded_image.size(),CV_32F);
   cv::log(float_padded_image,log_original_image);
+
+  cv::normalize(log_original_image, log_visualiza, 0, 1, cv::NORM_MINMAX);
+  cv::imshow("LOG", log_visualiza);
+  cv::waitKey();
 
   // parte imaginaria da matriz complexa (preenchida com zeros)
   zeros = cv::Mat_<float>::zeros(float_padded_image.size());
@@ -135,6 +140,7 @@ int main(int argc, char** argv){
   std::cout<<planos[0].type()<<std::endl;
   cv::exp(planos[0],g);
   std::cout<<g.type()<<std::endl;
+//  std::cout<<planos[1];
   // normaliza a parte real para exibicao
   cv::normalize(g, g, 0, 1, cv::NORM_MINMAX);
   cv::normalize(planos[0], planos[0], 0, 1, cv::NORM_MINMAX);
